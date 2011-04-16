@@ -20,6 +20,6 @@
 # Learn more: http://github.com/javan/whenever
 
 every 1.day, :at => '00:05 am' do 
-  runner "/Users/humbroll/workspace/Project/nhn/appdata/app/runner/appRankCrawler", :environment => :development
+  runner "/Users/humbroll/workspace/Project/nhn/appdata/app/runner/appRankCrawler", :environment => :production
   #e.g. runner "/home/humbroll/workspace/mentalArithmetic/app/runner/deleteWithdrawalUser", :environment => :production  
 end
