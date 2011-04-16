@@ -8,6 +8,7 @@ gem 'rails', '3.0.0'
 #gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'mysql2'
 gem 'casein'
+gem 'whenever', :require => false
 
 # Use unicorn as the web server
 # gem 'unicorn'
