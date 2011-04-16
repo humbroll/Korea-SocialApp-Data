@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @app.name %>
+</p>
+
+<p>
+  <b>Appid:</b>
+  <%= @app.appId %>
+</p>
+
+<p>
+  <b>Author:</b>
+  <%= @app.author %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%= @app.description %>
+</p>
+
+<p>
+  <b>Category:</b>
+  <%= @app.category %>
+</p>
+
+<p>
+  <b>Birthday:</b>
+  <%= @app.birthday %>
+</p>
+
+<p>
+  <b>Platform:</b>
+  <%= @app.platform %>
+</p>
+
+
+<%= link_to 'Edit', edit_app_path(@app) %> |
+<%= link_to 'Back', apps_path %>

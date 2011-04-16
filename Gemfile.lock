@@ -46,6 +46,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.16)
     mysql2 (0.2.7)
+    nokogiri (1.4.4)
     polyglot (0.3.1)
     rack (1.2.2)
     rack-mount (0.6.14)
@@ -78,4 +79,5 @@ PLATFORMS
 DEPENDENCIES
   casein
   mysql2
+  nokogiri
   rails (= 3.0.0)

@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Rank:</b>
+  <%= @rank.rank %>
+</p>
+
+<p>
+  <b>Ordertype:</b>
+  <%= @rank.orderType %>
+</p>
+
+<p>
+  <b>Rating:</b>
+  <%= @rank.rating %>
+</p>
+
+<p>
+  <b>Downloadcount:</b>
+  <%= @rank.downloadCount %>
+</p>
+
+<p>
+  <b>App:</b>
+  <%= @rank.app_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_rank_path(@rank) %> |
+<%= link_to 'Back', ranks_path %>

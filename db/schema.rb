@@ -10,7 +10,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110401091651) do
+ActiveRecord::Schema.define(:version => 20110416012309) do
+
+  create_table "apps", :force => true do |t|
+    t.string   "name",        :null => false
+    t.integer  "appId",       :null => false
+    t.string   "author",      :null => false
+    t.text     "description", :null => false
+    t.string   "category",    :null => false
+    t.date     "birthday",    :null => false
+    t.string   "platform",    :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "casein_users", :force => true do |t|
     t.string   "login",                              :null => false
@@ -30,6 +42,16 @@ ActiveRecord::Schema.define(:version => 20110401091651) do
     t.string   "current_login_ip"
     t.string   "last_login_ip"
     t.string   "time_zone"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "ranks", :force => true do |t|
+    t.integer  "rank",          :null => false
+    t.string   "orderType",     :null => false
+    t.float    "rating",        :null => false
+    t.integer  "downloadCount", :null => false
+    t.integer  "app_id",        :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

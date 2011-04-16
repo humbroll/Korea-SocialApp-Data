@@ -1,4 +1,8 @@
 Appdata::Application.routes.draw do
+  resources :ranks
+
+  resources :apps
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
