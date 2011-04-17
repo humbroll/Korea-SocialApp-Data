@@ -4,7 +4,7 @@ module Casein
   	# Text string containing the name of the website or client
   	# Used in text and titles throughout Casein
     def casein_config_website_name
-    	"humbroll's AppData"
+    	'Casein'
     end
 
   	# URL to the logo used for the login screen and top banner - it should be a transparent PNG
@@ -15,7 +15,7 @@ module Casein
   	# The server hostname where Casein will run
     def casein_config_hostname
       if ENV['RAILS_ENV'] == 'production'
-        'http://appdata.humbroll.com'
+        'http://www.caseincms.com'
       else
         'http://localhost:3000'
       end
@@ -23,12 +23,13 @@ module Casein
 
   	# The sender email address used for notifications
   	def casein_config_email_from_address
-  		'doppelhl@gmail.com'
+  		'humbroll@gmail.com'
   	end
 	
+  	# The page that the user is shown when they login or click the logo
   	# do not point this at casein/index!
   	def casein_config_dashboard_url
-  		url_for :controller => :application, :action => :index
+  		url_for :controller => :casein, :action => :blank
   	end
 	
   	# A list of stylesheet files to include in the page head section

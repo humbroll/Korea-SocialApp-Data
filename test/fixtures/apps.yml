@@ -1,19 +1,19 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 one:
-  name: 
+  name: MyString
   appId: 
-  author: 
-  description: 
-  category: 
-  birthday: 
+  author: MyString
+  description: MyText
+  category: MyString
+  birthday: 2011-04-17
   platform: MyString
 
 two:
-  name: 
+  name: MyString
   appId: 
-  author: 
-  description: 
-  category: 
-  birthday: 
+  author: MyString
+  description: MyText
+  category: MyString
+  birthday: 2011-04-17
   platform: MyString

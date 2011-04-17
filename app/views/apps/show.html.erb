@@ -35,6 +35,15 @@
   <%= @app.platform %>
 </p>
 
+<p>
+  <b>graph:</b>
+  <div class="graph">
+	<%= render 'graph' %>
+  </div>
+</p>
+<script type="text/javascript">
+  $.plot($("#placeholder"), [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
+</script>
 
 <%= link_to 'Edit', edit_app_path(@app) %> |
 <%= link_to 'Back', apps_path %>

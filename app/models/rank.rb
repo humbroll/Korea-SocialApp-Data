@@ -1,3 +1,3 @@
 class Rank < ActiveRecord::Base
-  belongs_to :app
+  belongs_to :app_id
 end
