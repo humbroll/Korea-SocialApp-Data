@@ -5,7 +5,7 @@ class CreateRanks < ActiveRecord::Migration
       t.string :orderType
       t.float :rating
       t.integer :downloadCount
-      t.references :app_id
+      t.references :app
 
       t.timestamps
     end
