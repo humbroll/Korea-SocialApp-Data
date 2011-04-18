@@ -41,7 +41,7 @@ def naverCrawlRank(orderType = NAVER_ORDER_TYPE[0])
       birthday = app.css('dl.app_info dd.date').text
 
       rating = app.css('dl.app_info dd em').text
-      downloadCount = app.css('dl.app_info dd.total span').text
+      downloadCount = app.css('dl.app_info dd.total span').text.delete(",").to_i
 
       a = App.find(:first, :conditions=>["name=? and appId=?", name, appId])
 
@@ -123,9 +123,9 @@ NATE_ORDER_TYPE.each do |ot|
 end
 
 # for naver apps test in rails console
-# require 'open-uri'
-# require 'nokogiri'
-# app = Nokogiri::HTML(open("http://apps.naver.com/apps?serviceType=all&viewType=default&page=1&orderType=INSTALL")).css("div.app_list ol li").first
+require 'open-uri'
+require 'nokogiri'
+app = Nokogiri::HTML(open("http://apps.naver.com/apps?serviceType=all&viewType=default&page=1&orderType=INSTALL")).css("div.app_list ol li").first
 
 # for nate apps test in rails console
 # require 'open-uri'
