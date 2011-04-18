@@ -14,6 +14,25 @@ class AppsController < ApplicationController
   # GET /apps/1.xml
   def show
     @app = App.find(params[:id])
+    
+    @rankData = []
+    if @app.platform == "nate"
+      @app.ranks.find(:all, :conditions=>{:orderType=>"1"}).each do |r|
+        @rankData << [r.created_at.to_time.to_i*1000, r.downloadCount]
+      end
+    else #@app.platform == "naver"
+      @app.ranks.find(:all, :conditions=>{:orderType=>"INSTALL"}).each do |r|
+        @rankData << [r.created_at.to_time.to_i*1000, r.downloadCount]
+      end      
+    end
+    
+    @graphOptions = {
+      "xaxis"=>{
+        :mode => "time",
+        :tickSize => [1, "day"],
+        :timeformat => "%y/%m/%d"
+      }
+    }
 
     respond_to do |format|
       format.html # show.html.erb
