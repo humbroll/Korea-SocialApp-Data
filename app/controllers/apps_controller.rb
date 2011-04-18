@@ -18,11 +18,11 @@ class AppsController < ApplicationController
     @rankData = []
     if @app.platform == "nate"
       @app.ranks.find(:all, :conditions=>{:orderType=>"1"}).each do |r|
-        @rankData << [r.created_at.to_time.to_i*1000, r.downloadCount]
+        @rankData << [r.created_at.localtime.to_time.to_i*1000, r.downloadCount]
       end
     else #@app.platform == "naver"
       @app.ranks.find(:all, :conditions=>{:orderType=>"INSTALL"}).each do |r|
-        @rankData << [r.created_at.to_time.to_i*1000, r.downloadCount]
+        @rankData << [r.created_at.localtime.to_time.to_i*1000, r.downloadCount]
       end      
     end
     

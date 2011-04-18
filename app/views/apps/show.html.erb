@@ -45,8 +45,6 @@
   // $.plot($("#placeholder"), [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
   var rankData = <%= raw @rankData.to_json %>;
   var graphOptions = <%= raw @graphOptions.to_json %>;
-  console.log(rankData);
-console.log(graphOptions);
   $.plot($("#placeholder"), [rankData], graphOptions);
 
   
