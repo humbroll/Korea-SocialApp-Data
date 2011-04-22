@@ -1,5 +1,19 @@
 <h1>Listing apps</h1>
 
+<div class="graph">
+<%= render 'graph' %>
+</div>
+<script type="text/javascript">
+  // $.plot($("#placeholder"), [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
+  var graphData = <%= raw @graphData.to_json %>;
+  var graphOptions = <%= raw @graphOptions.to_json %>;
+console.log(graphData);
+ // graphData =[ { label: "Foo", data: [ [10, 1], [17, -14], [30, 5] ] },
+ //    { label: "Bar", data: [ [11, 13], [19, 11], [30, -7] ] } ];
+console.log(graphData);
+  $.plot($("#placeholder"), graphData, graphOptions);
+</script>
+
 <table>
   <tr>
     <th>Name</th>

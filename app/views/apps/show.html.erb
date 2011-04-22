@@ -46,8 +46,6 @@
   var rankData = <%= raw @rankData.to_json %>;
   var graphOptions = <%= raw @graphOptions.to_json %>;
   $.plot($("#placeholder"), [rankData], graphOptions);
-
-  
 </script>
 
 <%= link_to 'Edit', edit_app_path(@app) %> |

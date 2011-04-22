@@ -2,6 +2,45 @@ class AppsController < ApplicationController
   # GET /apps
   # GET /apps.xml
   def index
+    @graphData = []
+    App.nate.each do |app|
+      obj =  {
+        :label=>app.name,
+        :data=>[]
+      }
+      app.ranks.each do |r|
+        obj[:data] << [r.created_at.localtime.to_time.to_i*1000, r.downloadCount]
+      end
+      @graphData << obj
+    end
+    
+    @graphOptions = {
+      :series => {
+          :lines => { :show => true },
+          :points => { :show => true }
+      },
+      :legend => { :noColumns => 3},
+      :xaxis => {
+        :mode => "time",
+        :tickSize => [1, "day"],
+        :timeformat => "%y/%m/%d"
+      },
+      :selection => { :mode => "x" }
+    }
+    
+    # var options = {
+    #     series: {
+    #         lines: { show: true },
+    #         points: { show: true }
+    #     },
+    #     legend: { noColumns: 2 },
+    #     xaxis: { tickDecimals: 0 },
+    #     yaxis: { min: 0 },
+    #     selection: { mode: "x" }
+    # };
+    # 
+    
+    
     @apps = App.all
 
     respond_to do |format|
@@ -9,21 +48,21 @@ class AppsController < ApplicationController
       format.xml  { render :xml => @apps }
     end
   end
-
+  
+  # def graphAll
+  # 
+  # end
+  
   # GET /apps/1
   # GET /apps/1.xml
   def show
     @app = App.find(params[:id])
     
     @rankData = []
-    if @app.platform == "nate"
-      @app.ranks.find(:all, :conditions=>{:orderType=>"1"}).each do |r|
-        @rankData << [r.created_at.localtime.to_time.to_i*1000, r.downloadCount]
-      end
-    else #@app.platform == "naver"
-      @app.ranks.find(:all, :conditions=>{:orderType=>"INSTALL"}).each do |r|
-        @rankData << [r.created_at.localtime.to_time.to_i*1000, r.downloadCount]
-      end      
+    orderType = (@app.platform == "nate")? "1" : "INSTALL"
+
+    @app.ranks.find(:all, :conditions=>{:orderType=>orderType}).each do |r|
+      @rankData << [r.created_at.localtime.to_time.to_i*1000, r.downloadCount]
     end
     
     @graphOptions = {
