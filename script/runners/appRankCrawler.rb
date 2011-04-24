@@ -43,7 +43,7 @@ def naverCrawlRank(orderType = NAVER_ORDER_TYPE[0])
       rating = app.css('dl.app_info dd em').text
       downloadCount = app.css('dl.app_info dd.total span').text.delete(",").to_i
 
-      a = App.find(:first, :conditions=>["name=? and appId=?", name, appId])
+      a = App.find(:first, :conditions=>["platform=? and appId=?", "naver", appId])
 
       if a.nil?
         a = App.create(:name=>name,
@@ -91,7 +91,7 @@ def nateCrawlRank(orderType = NATE_ORDER_TYPE[0])
       rating = app.css('dd.star em.star-value i').text[0..2]
       downloadCount = app.css('dd.thumb p.people strong em').text
             
-      a = App.find(:first, :conditions=>["name=? and appId=?", name, appId])
+      a = App.find(:first, :conditions=>["platform=? and appId=?", "nate", appId])
     
       if a.nil?
         a = App.create(:name=>name, 
