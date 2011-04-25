@@ -23,7 +23,8 @@
 	left: 0;
 	right: 318px;
 	background: #fff;
-	z-index: 10;
+	/*	z-index: 10;  humbroll modified  */
+	z-index: 0;
 	overflow: auto;
 }
 

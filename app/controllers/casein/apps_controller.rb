@@ -2,6 +2,7 @@
 
 module Casein
   class AppsController < Casein::CaseinController
+    layout 'casein_appdata_main'
   
     ## optional filters for defining usage according to Casein::Users access_levels
     # before_filter :needs_admin, :except => [:action1, :action2]
@@ -9,12 +10,124 @@ module Casein
   
     def index
       @casein_page_title = 'Apps'
-  		@apps = App.paginate :page => params[:page]
+  		
+  		@platform = params[:platform] || "naver"
+      ranks = []
+
+      @graphData = []
+      orderType = ""
+      if @platform == "naver" 
+        orderType = params[:orderType] || "POPULARITY"
+        ranks = Rank.find(:all, 
+          :limit=>20, 
+          :order => "rank ASC", 
+          :conditions=>["orderType=? and created_at > ?", orderType, 1.days.ago])
+      else
+        orderType = params[:orderType] || "1"
+        ranks = Rank.find(:all, 
+          :limit=>20, 
+          :order => "rank ASC", 
+          :conditions=>["orderType=? and created_at > ?", orderType, 1.days.ago])
+      end
+
+      ranks.each do |r|
+        obj =  {
+          :label=>r.app.name,
+          :data=>[]
+        }
+
+        if orderType == "1" || orderType == "POPULARITY" 
+          r.app.ranks.hot.each do |r|
+            obj[:data] << [r.created_at.localtime.to_time.to_i*1000, r.rank]
+          end
+        else
+          r.app.ranks.install.each do |r|
+            obj[:data] << [r.created_at.localtime.to_time.to_i*1000, r.rank]
+          end
+        end
+        @graphData << obj
+      end
+
+      @graphOptions = {
+        :series => {
+            :lines => { :show => true },
+            :points => { :show => true }
+        },
+        :legend => { :noColumns => 3},
+        :xaxis => {
+          :mode => "time",
+          :tickSize => [1, "day"],
+          :timeformat => "%y/%m/%d"
+        },
+        :grid => { 
+          :hoverable => "true",
+          :clickable => "true"
+        },
+        :selection => { :mode => "x" }
+      }
+
+      # var options = {
+      #     series: {
+      #         lines: { show: true },
+      #         points: { show: true }
+      #     },
+      #     legend: { noColumns: 2 },
+      #     xaxis: { tickDecimals: 0 },
+      #     yaxis: { min: 0 },
+      #     selection: { mode: "x" }
+      # };
+      # 
+
+      @apps
+      if @platform == "naver"
+        @apps = App.naver.paginate :page => params[:page]
+      else #"nate"
+        @apps = App.nate.paginate :page => params[:page]
+      end
+
+      respond_to do |format|
+        format.html # index.html.erb
+        format.xml  { render :xml => @apps }
+      end
+      
+      
     end
   
     def show
       @casein_page_title = 'View app'
-      @app = App.find params[:id]
+      # @app = App.find params[:id]
+
+      @app = App.find(params[:id])
+
+      @rankData = []
+      orderType = params[:orderType] || ((@app.platform == "nate")? "1" : "POPULARITY")
+
+      @app.ranks.find(:all, :conditions=>{:orderType=>orderType}).each do |r|
+        @rankData << [r.created_at.localtime.to_time.to_i*1000, r.rank]
+      end
+
+      @graphOptions = {
+        :series => {
+            :lines => { :show => true },
+            :points => { :show => true }
+        },
+        :legend => { :noColumns => 3},
+        :xaxis => {
+          :mode => "time",
+          :tickSize => [1, "day"],
+          :timeformat => "%y/%m/%d"
+        },
+        :grid => { 
+          :hoverable => "true",
+          :clickable => "true"
+        },
+        :selection => { :mode => "x" }
+      }
+
+      respond_to do |format|
+        format.html # show.html.erb
+        format.xml  { render :xml => @app }
+      end
     end
  
     def new

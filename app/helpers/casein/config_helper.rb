@@ -4,7 +4,7 @@ module Casein
   	# Text string containing the name of the website or client
   	# Used in text and titles throughout Casein
     def casein_config_website_name
-    	'Casein'
+    	'Appdata'
     end
 
   	# URL to the logo used for the login screen and top banner - it should be a transparent PNG
@@ -29,7 +29,7 @@ module Casein
   	# The page that the user is shown when they login or click the logo
   	# do not point this at casein/index!
   	def casein_config_dashboard_url
-  		url_for :controller => :casein, :action => :blank
+  		url_for :controller => :apps, :action => :index
   	end
 	
   	# A list of stylesheet files to include in the page head section
@@ -39,7 +39,7 @@ module Casein
 	
   	# A list of JavaScript files to include in the page head section
   	def casein_config_javascript_includes
-  	  %w[/casein/javascripts/jquery /casein/javascripts/custom /casein/javascripts/casein /casein/javascripts/rails]
+  	  %w[/casein/javascripts/custom /casein/javascripts/casein /casein/javascripts/rails]
   	end
   	
   end
