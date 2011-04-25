@@ -105,6 +105,10 @@ class AppsController < ApplicationController
         :tickSize => [1, "day"],
         :timeformat => "%y/%m/%d"
       },
+      :grid => { 
+        :hoverable => "true",
+        :clickable => "true"
+      },
       :selection => { :mode => "x" }
     }
 
