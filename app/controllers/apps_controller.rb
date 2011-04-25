@@ -14,7 +14,8 @@ class AppsController < ApplicationController
         :data=>[]
       }
       r.app.ranks.each do |r|
-        obj[:data] << [r.created_at.localtime.to_time.to_i*1000, r.downloadCount]
+        #obj[:data] << [r.created_at.localtime.to_time.to_i*1000, r.downloadCount]
+        obj[:data] << [r.created_at.localtime.to_time.to_i*1000, r.rank]
       end
       @graphData << obj
     end
