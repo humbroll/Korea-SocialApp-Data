@@ -73,8 +73,7 @@
               var x = item.datapoint[0].toFixed(2),
                   y = item.datapoint[1].toFixed(2);
               
-              showTooltip(item.pageX, item.pageY,
-                          item.series.label + " : " + $.plot.formatDate(new Date(item.datapoint[0]), "%y/%m/%d", null) + " - " + item.datapoint[1] + "위");
+              showTooltip(item.pageX, item.pageY, $.plot.formatDate(new Date(item.datapoint[0]), "%y/%m/%d", null) + " - " + item.datapoint[1] + "위");
           }
       }
       else {
