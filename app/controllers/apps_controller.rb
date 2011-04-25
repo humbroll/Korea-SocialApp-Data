@@ -3,17 +3,22 @@ class AppsController < ApplicationController
   # GET /apps.xml
   def index
     @graphData = []
-    App.nate.each do |app|
+    ranks = Rank.find(:all, 
+      :limit=>10, 
+      :order => "rank ASC", 
+      :conditions=>["orderType=? and created_at > ?", 1, 1.days.ago])
+      
+    ranks.each do |r|
       obj =  {
-        :label=>app.name,
+        :label=>r.app.name,
         :data=>[]
       }
-      app.ranks.each do |r|
+      r.app.ranks.each do |r|
         obj[:data] << [r.created_at.localtime.to_time.to_i*1000, r.downloadCount]
       end
       @graphData << obj
     end
-    
+
     @graphOptions = {
       :series => {
           :lines => { :show => true },
