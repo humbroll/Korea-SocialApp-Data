@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title><%= casein_generate_page_title %></title>
+		
+		<script type="text/javascript" src="http://appdown.nsocialcontainer.com/naver/nsocialcontainer/20224/javascripts/lib/jquery.min.js?ver=0"></script>
+	  <script language="javascript" type="text/javascript" src="/flot/jquery.flot.min.js"></script>
+	  <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="excanvas.min.js"></script><![endif]-->
+		
+		<%= stylesheet_link_tag casein_config_stylesheet_includes %>
+		<%= javascript_include_tag casein_config_javascript_includes %>
+		<%= csrf_meta_tag %>
+	</head>
+	<body>
+		<div id="header">
+			<h1><%= link_to(image_tag(casein_config_logo, :alt => casein_config_website_name), :controller => :casein) %></h1>
+			<div id="dashboard">
+				<% if @session_user != nil %>
+				<ul>
+					<li>Hello <%= @session_user.name %></li>
+					<li><%= Time.zone.name %></li>
+					<li><%= link_to 'Profile', casein_user_path(@session_user) %></li>
+					<li class="lastItem"><%= link_to 'Logout', casein_user_session_path, :method => :delete %></li>
+				</ul>	
+				<% end %>
+			</div>
+			<div id="navigation">
+				<ul>
+					<%= render :partial => '/casein/layouts/left_navigation' %>
+				</ul>		
+			</div>
+			<div id="altNavigation">
+				<ul>
+					<% if @session_user.is_admin? %>
+						<li><%= link_to 'Users', casein_users_path %></li>
+					<% end %>
+					<%= render :partial => '/casein/layouts/right_navigation' %>
+				</ul>
+			</div>
+		</div>
+		<div id="rightBar">
+			<div class="spacer"></div>
+			<ul>
+				<%= yield :sidebar %>
+			</ul>
+		</div>
+		<div id="content">
+			<div id="data">
+				<% if flash[:warning] %>
+					<div id="error">
+						<%= flash[:warning] %>
+					</div>
+				<% end %>
+				<% if flash[:notice] %>
+					<div id="notice">
+						<%= flash[:notice] %>
+					</div>
+				<% end %>
+				<%= yield %>
+			</div>
+		</div>
+	</body>
+</html>
