@@ -1,17 +1,53 @@
 <h1>Listing apps</h1>
 
+<% default_path = "http://#{self.request.host}:#{self.request.port}/apps" %>
+<p>naver(<a href="<%= default_path + "?platform=naver&orderType=POPULARITY"%>">인기순</a>, <a href="<%= default_path + "?platform=naver&orderType=INSTALL"%>">설치많은순</a>) / nate(<a href="<%= default_path + "?platform=nate&orderType=1"%>">최근7일순</a>, <a href="<%= default_path + "?platform=nate&orderType=2"%>">전체누적순</a>)</p>
+
 <div class="graph">
-<%= render 'graph' %>
+	<div id="placeholder" style="width:1200px;height:600px"></div>
 </div>
+
 <script type="text/javascript">
-  // $.plot($("#placeholder"), [ [[0, 0], [1, 1]] ], { yaxis: { max: 1 } });
   var graphData = <%= raw @graphData.to_json %>;
   var graphOptions = <%= raw @graphOptions.to_json %>;
-console.log(graphData);
- // graphData =[ { label: "Foo", data: [ [10, 1], [17, -14], [30, 5] ] },
- //    { label: "Bar", data: [ [11, 13], [19, 11], [30, -7] ] } ];
-console.log(graphData);
   $.plot($("#placeholder"), graphData, graphOptions);
+
+  function showTooltip(x, y, contents) {
+      $('<div id="tooltip">' + contents + '</div>').css( {
+          position: 'absolute',
+          display: 'none',
+          top: y + 5,
+          left: x + 5,
+          border: '1px solid #fdd',
+          padding: '2px',
+          'background-color': '#fee',
+          opacity: 0.80
+      }).appendTo("body").fadeIn(200);
+  }
+
+  var previousPoint = null;
+  $("#placeholder").bind("plothover", function (event, pos, item) {
+      $("#x").text(pos.x.toFixed(2));
+      $("#y").text(pos.y.toFixed(2));
+
+      if (item) {
+          if (previousPoint != item.dataIndex) {
+              previousPoint = item.dataIndex;
+              
+              $("#tooltip").remove();
+              var x = item.datapoint[0].toFixed(2),
+                  y = item.datapoint[1].toFixed(2);
+              
+              showTooltip(item.pageX, item.pageY,
+                          item.series.label + " : " + $.plot.formatDate(new Date(item.datapoint[0]), "%y/%m/%d", null) + " - " + item.datapoint[1] + "위");
+          }
+      }
+      else {
+          $("#tooltip").remove();
+          previousPoint = null;            
+      }
+
+  });
 </script>
 
 <table>

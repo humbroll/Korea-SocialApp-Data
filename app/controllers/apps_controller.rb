@@ -2,20 +2,39 @@ class AppsController < ApplicationController
   # GET /apps
   # GET /apps.xml
   def index
+    platform = params[:platform] || "naver"
+    ranks = []
+    
     @graphData = []
-    ranks = Rank.find(:all, 
-      :limit=>10, 
-      :order => "rank ASC", 
-      :conditions=>["orderType=? and created_at > ?", 1, 1.days.ago])
-      
+    orderType = ""
+    if platform == "naver" 
+      orderType = params[:orderType] || "POPULARITY"
+      ranks = Rank.find(:all, 
+        :limit=>20, 
+        :order => "rank ASC", 
+        :conditions=>["orderType=? and created_at > ?", orderType, 1.days.ago])
+    else
+      orderType = params[:orderType] || "1"
+      ranks = Rank.find(:all, 
+        :limit=>20, 
+        :order => "rank ASC", 
+        :conditions=>["orderType=? and created_at > ?", orderType, 1.days.ago])
+    end
+
     ranks.each do |r|
       obj =  {
         :label=>r.app.name,
         :data=>[]
       }
-      r.app.ranks.each do |r|
-        #obj[:data] << [r.created_at.localtime.to_time.to_i*1000, r.downloadCount]
-        obj[:data] << [r.created_at.localtime.to_time.to_i*1000, r.rank]
+      
+      if orderType == "1" || orderType == "POPULARITY" 
+        r.app.ranks.hot.each do |r|
+          obj[:data] << [r.created_at.localtime.to_time.to_i*1000, r.rank]
+        end
+      else
+        r.app.ranks.install.each do |r|
+          obj[:data] << [r.created_at.localtime.to_time.to_i*1000, r.rank]
+        end
       end
       @graphData << obj
     end
@@ -30,6 +49,10 @@ class AppsController < ApplicationController
         :mode => "time",
         :tickSize => [1, "day"],
         :timeformat => "%y/%m/%d"
+      },
+      :grid => { 
+        :hoverable => "true",
+        :clickable => "true"
       },
       :selection => { :mode => "x" }
     }
@@ -65,18 +88,24 @@ class AppsController < ApplicationController
     @app = App.find(params[:id])
     
     @rankData = []
-    orderType = (@app.platform == "nate")? "1" : "INSTALL"
+    orderType = params[:orderType] || ((@app.platform == "nate")? "1" : "POPULARITY")
 
     @app.ranks.find(:all, :conditions=>{:orderType=>orderType}).each do |r|
-      @rankData << [r.created_at.localtime.to_time.to_i*1000, r.downloadCount]
+      @rankData << [r.created_at.localtime.to_time.to_i*1000, r.rank]
     end
     
     @graphOptions = {
-      "xaxis"=>{
+      :series => {
+          :lines => { :show => true },
+          :points => { :show => true }
+      },
+      :legend => { :noColumns => 3},
+      :xaxis => {
         :mode => "time",
         :tickSize => [1, "day"],
         :timeformat => "%y/%m/%d"
-      }
+      },
+      :selection => { :mode => "x" }
     }
 
     respond_to do |format|
