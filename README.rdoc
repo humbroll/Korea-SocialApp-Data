@@ -1,0 +1,4 @@
+= Korea App Data 
+Korea App Data is a web serbice that provides statistic of Naver&Nate social apps statistics of each platform. 
+= Site (temporary)
+http://appdata.humbroll.com:3000/casein/apps
