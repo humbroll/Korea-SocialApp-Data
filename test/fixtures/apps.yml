@@ -17,3 +17,20 @@ two:
   category: MyString
   birthday: 2011-04-17
   platform: MyString
+
+# == Schema Information
+#
+# Table name: apps
+#
+#  id          :integer(4)      not null, primary key
+#  name        :string(255)
+#  appId       :integer(4)
+#  author      :string(255)
+#  description :text
+#  category    :string(255)
+#  birthday    :date
+#  platform    :string(255)
+#  created_at  :datetime
+#  updated_at  :datetime
+#
+

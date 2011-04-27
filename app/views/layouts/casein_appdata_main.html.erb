@@ -16,7 +16,8 @@
 	</head>
 	<body>
 		<div id="header">
-			<h1><%= link_to(image_tag(casein_config_logo, :alt => casein_config_website_name), :controller => :casein) %></h1>
+			<!-- <h1><%= link_to(image_tag(casein_config_logo, :alt => casein_config_website_name), :controller => :casein) %></h1> -->
+			<h1>Korea AppData</h1>
 			<div id="dashboard">
 				<% if @session_user != nil %>
 				<ul>
@@ -41,12 +42,12 @@
 				</ul>
 			</div>
 		</div>
-		<div id="rightBar">
+		<!-- <div id="rightBar">
 			<div class="spacer"></div>
 			<ul>
-				<%= yield :sidebar %>
+				<#%= yield :sidebar %>
 			</ul>
-		</div>
+		</div> -->
 		<div id="content">
 			<div id="data">
 				<% if flash[:warning] %>

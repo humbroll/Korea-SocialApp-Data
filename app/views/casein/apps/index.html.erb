@@ -1,5 +1,13 @@
+<div class="orderType" style="text-align:right;">
+<% if @platform == "naver"%>
+<%= link_to "인기순".html_safe, "/casein/apps?platform=naver&orderType=POPULARITY" %> / <%= link_to "설치 많은순".html_safe, "/casein/apps?platform=naver&orderType=INSTALL" %>
+<% else %>
+<%= link_to "최근 7일순".html_safe, "/casein/apps?platform=nate&orderType=1" %> / <%= link_to "전체 누적순".html_safe, "/casein/apps?platform=nate&orderType=2" %>
+<% end %>
+</div>
+<br/>
 <div class="graph">
-	<div id="placeholder" style="width:900px;height:500px"></div>
+	<div id="placeholder" style="width:100%;height:500px"></div>
 </div>
 
 <script type="text/javascript">
@@ -54,11 +62,4 @@
 
 <%= content_for :sidebar do %>
 	<!-- <li><%= link_to "#{casein_show_icon "add"}Add a new app".html_safe, new_casein_app_path %></li> -->
-	<% if @platform == "naver"%>
-		<li><%= link_to "#{casein_show_icon "table"}인기순".html_safe, "/casein/apps?platform=naver&orderType=POPULARITY" %></li>
-		<li><%= link_to "#{casein_show_icon "table"}설치 많은순".html_safe, "/casein/apps?platform=naver&orderType=INSTALL" %></li>
-	<% else %>
-		<li><%= link_to "#{casein_show_icon "table"}최근 7일순".html_safe, "/casein/apps?platform=nate&orderType=1" %></li>
-		<li><%= link_to "#{casein_show_icon "table"}전체 누적순".html_safe, "/casein/apps?platform=nate&orderType=2" %></li>
-	<% end %>
 <% end %>
