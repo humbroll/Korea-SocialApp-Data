@@ -22,7 +22,7 @@ module Casein
           :limit=>20, 
           :order => "rank ASC", 
           :conditions=>["orderType=? and created_at > ?", orderType, 1.days.ago])
-      else
+      else # @platform == "nate" 
         orderType = params[:orderType] || "1"
         ranks = Rank.find(:all, 
           :limit=>20, 
