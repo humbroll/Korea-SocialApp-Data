@@ -12,6 +12,7 @@ module Casein
       @casein_page_title = 'Apps'
   		
   		@platform = params[:platform] || "naver"
+  		limit = params[:limit] || 20
       ranks = []
 
       @graphData = []
@@ -19,13 +20,13 @@ module Casein
       if @platform == "naver" 
         orderType = params[:orderType] || "POPULARITY"
         ranks = Rank.find(:all, 
-          :limit=>20, 
+          :limit=>limit, 
           :order => "rank ASC", 
           :conditions=>["orderType=? and created_at > ?", orderType, 1.days.ago])
       else # @platform == "nate" 
         orderType = params[:orderType] || "1"
         ranks = Rank.find(:all, 
-          :limit=>20, 
+          :limit=>limit, 
           :order => "rank ASC", 
           :conditions=>["orderType=? and created_at > ?", orderType, 1.days.ago])
       end
