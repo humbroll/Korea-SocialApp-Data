@@ -13,6 +13,7 @@ module Casein
   		
   		@platform = params[:platform] || "naver"
   		limit = params[:limit] || 20
+  		offset = params[:offset] || 0
       ranks = []
 
       @graphData = []
@@ -21,12 +22,14 @@ module Casein
         orderType = params[:orderType] || "POPULARITY"
         ranks = Rank.find(:all, 
           :limit=>limit, 
+          :offset=>offset,
           :order => "rank ASC", 
           :conditions=>["orderType=? and created_at > ?", orderType, 1.days.ago])
       else # @platform == "nate" 
         orderType = params[:orderType] || "1"
         ranks = Rank.find(:all, 
           :limit=>limit, 
+          :offset=>offset,
           :order => "rank ASC", 
           :conditions=>["orderType=? and created_at > ?", orderType, 1.days.ago])
       end
