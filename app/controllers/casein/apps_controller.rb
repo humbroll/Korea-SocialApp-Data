@@ -104,10 +104,10 @@ module Casein
       @app = App.find(params[:id])
 
       @rankData = []
-      orderType = params[:orderType] || ((@app.platform == "nate")? "1" : "POPULARITY")
+      @orderType = params[:orderType] || ((@app.platform == "nate")? "2" : "INSTALL")
 
-      @app.ranks.find(:all, :conditions=>{:orderType=>orderType}).each do |r|
-        @rankData << [r.created_at.localtime.to_time.to_i*1000, r.rank]
+      @app.ranks.find(:all, :conditions=>{:orderType=>@orderType}).each do |r|
+        @rankData << [r.created_at.localtime.to_time.to_i*1000, r.downloadCount]
       end
 
       @graphOptions = {
