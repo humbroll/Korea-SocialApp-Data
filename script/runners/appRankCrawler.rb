@@ -2,17 +2,19 @@ require 'open-uri'
 require 'nokogiri'
 
 NAVER_ORDER_TYPE=%w{INSTALL POPULARITY}
-NATE_ORDER_TYPE=%w{1 2} #1:last 7days, 2:cumulate
+# NATE_ORDER_TYPE=%w{1 2} #1:last 7days, 2:cumulate
+NATE_ORDER_TYPE=%w{1 2} #1:업데이트순(앱이 업데이트 된 순으로), 2:인기순(오늘 play를 시작한 회원이 많은순으로
 
 NAVER_APP_LIST_ACCESS_CSS_SELECTOR = "div.app_list ol li"
-NATE_APP_LIST_ACCESS_CSS_SELECTOR = "div.apps-ranklist dl.apps-item"
+# NATE_APP_LIST_ACCESS_CSS_SELECTOR = "div.apps-ranklist dl.apps-item"
+NATE_APP_LIST_ACCESS_CSS_SELECTOR = "div.popularBox div.list dl"
 
 def naverRankPageURL(page = 1, orderType = NAVER_ORDER_TYPE[0])
   return "http://apps.naver.com/apps?serviceType=all&viewType=default&page=#{page}&orderType=#{orderType}"
 end
 
 def nateRankPageURL(page = 1, orderType = NATE_ORDER_TYPE[1])
-  return "http://appstore.nate.com/Main/PopularList?startpos=#{page}&ordertype=#{orderType}&cate_cd=#list_focus"
+  return "http://appstore.cyworld.com/Main/PopularList?startpos=#{page}&ordertype=#{orderType}&cate_cd=#list_focus"
 end
 
 def naverCrawlRank(orderType = NAVER_ORDER_TYPE[0])
@@ -69,8 +71,13 @@ end
 def nateCrawlRank(orderType = NATE_ORDER_TYPE[0])
   doc = Nokogiri::HTML(open(nateRankPageURL(1, orderType)))
 
-  pageCount = doc.css('div.paging-wrap a.p-end').attr("href").value[27..28].to_i
-
+  # pageCount = doc.css('div.paging-wrap a.p-end').attr("href").value[27..28].to_i
+  appCount = doc.css('ul.category li').first.css('i').text.gsub(/\[|\]/,'').to_i
+  pageCount = appCount/10
+  if appCount%10 > 0 
+    pageCount += 1
+  end
+  
   rank = 1
 
   pageCount.times do |p|
@@ -82,14 +89,21 @@ def nateCrawlRank(orderType = NATE_ORDER_TYPE[0])
     
     doc.css(NATE_APP_LIST_ACCESS_CSS_SELECTOR).each do |app|
       name = app.css('dt a').text
-      appId = app.css('dt a').attr('onclick').content.split('(')[1].split(',')[0].split('=')[1]
-      author = app.css('dd.info span.developer em').text
-      description = app.css('dd.desc').text.strip
-      category = app.css('dd.info span.sec').text
-      birthday = app.css('dd.date').text.strip
+      # appId = app.css('dt a').attr('onclick').content.split('(')[1].split(',')[0].split('=')[1]
+      appId = app.css('dt a').attr('onclick').content.split('(')[1].split(',')[0].split('=')[1].gsub(/'|[a-z]|\s|;|\)/,'')
+      # author = app.css('dd.info span.developer em').text
+      author = app.css('dd.detail ul li.dev').text.split(" | ")[0]
+      # description = app.css('dd.desc').text.strip
+      description = app.css('dd.desc a').text
+      # category = app.css('dd.info span.sec').text
+      category = app.css('dd.detail ul li.cate').text.gsub(/\t|\s/,'')
+      # birthday = app.css('dd.date').text.strip
+      birthday = app.css('dd.detail ul li span.date').text
       
-      rating = app.css('dd.star em.star-value i').text[0..2]
-      downloadCount = app.css('dd.thumb p.people strong em').text
+      # rating = app.css('dd.star em.star-value i').text[0..2]
+      rating = app.css('dd.detail ul li.apinfo span.star').text
+      # downloadCount = app.css('dd.thumb p.people strong em').text
+      downloadCount = app.css('dd.detail ul li.apinfo span.mem').text.gsub(',','')
             
       a = App.find(:first, :conditions=>["platform=? and appId=?", "nate", appId])
     
@@ -101,6 +115,11 @@ def nateCrawlRank(orderType = NATE_ORDER_TYPE[0])
         :category=>category, 
         :birthday=>Date.parse(birthday),
         :platform=>"nate")
+      else
+        # will remove after migration
+        a.category = category
+        a.updated_at = Date.parse(birthday)
+        a.save
       end
       
       a.ranks.create(:rank=>rank,
@@ -123,13 +142,13 @@ NATE_ORDER_TYPE.each do |ot|
 end
 
 # for naver apps test in rails console
-require 'open-uri'
-require 'nokogiri'
-app = Nokogiri::HTML(open("http://apps.naver.com/apps?serviceType=all&viewType=default&page=1&orderType=INSTALL")).css("div.app_list ol li").first
-
-# for nate apps test in rails console
 # require 'open-uri'
 # require 'nokogiri'
-# app = Nokogiri::HTML(open("http://appstore.nate.com/Main/PopularList?ordertype=2&cate_cd=#list_focus")).css("div.apps-ranklist dl.apps-item").first
+# app = Nokogiri::HTML(open("http://apps.naver.com/apps?serviceType=all&viewType=default&page=1&orderType=INSTALL")).css("div.app_list ol li").first
+
+# for nate apps test in rails console
+require 'open-uri'
+require 'nokogiri'
+app = Nokogiri::HTML(open("http://appstore.nate.com/Main/PopularList?ordertype=2&cate_cd=#list_focus")).css("div.apps-ranklist dl.apps-item").first
 
 
